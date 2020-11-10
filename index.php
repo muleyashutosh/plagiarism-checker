@@ -108,8 +108,6 @@
                 $query = urlencode($sentence);
                 $url = 'https://www.google.com/search?q='.$query;
                 // echo $url;
-                $url .= '&cr=countryIN';
-                // echo $url;
                 $result = file_get_html($url);
                 $found = false;
                 foreach($result->find('#main div .ZINbbc.xpd.O9g5cc.uUPGi') as $entry) {
@@ -177,9 +175,79 @@
                     }
                 }
                 if($found === false) {
-                    echo "<div class = 'sent'>
-                                <div class = 'uni'>unique</div>$sentence
-                            </div><br>";
+                    $url = 'https://www.google.com/search?q='.$query;
+                    $url .= '&cr=countryIN';
+                    $result = file_get_html($url);
+                    foreach($result->find('#main div .ZINbbc.xpd.O9g5cc.uUPGi') as $entry) {
+                        // echo $entry;
+                        $text = $entry->find('.kCrYT div .BNeawe.s3v9rd.AP7Wnd div div (.BNeawe.s3v9rd.AP7Wnd)');
+                        $text = $text[0]->plaintext;
+                        if(strlen($text) < 2) {
+                            continue;
+                        }
+                        $text = str_replace('&#8220;','"',$text);
+                        $text = str_replace('&#8221;','"',$text);
+                        $text = str_replace('&#8216;',"'",$text);
+                        $text = str_replace('&#8217;',"'",$text);
+                        $s1 = "";
+                        $n = strlen($text);
+                        for($i = 0; $i < $n; $i++) {
+                            if($text[$i] == ' '
+                                && $i + 1 < $n 
+                                && ($text[$i+1]!= '.')  
+                                && ($text[$i+1] != '"')
+                                && ($text[$i+1] != "'")
+                                && !($text[$i+1] >= 0 && $text[$i+1] <= 9 )
+                                && !($text[$i+1] >= 'a' && $text[$i+1] <= 'z') 
+                                && !($text[$i+1] >= 'A' && $text[$i+1] <= 'Z')) {
+                                continue;
+                            }
+                            if($text[$i] != '.' 
+                                && $text[$i] != ' '
+                                && ($text[$i] != '"')
+                                && ($text[$i] != "'")
+                                && !($text[$i] >= 0 && $text[$i] <= 9 ) 
+                                && !($text[$i] >= 'a' && $text[$i] <= 'z') 
+                                && !($text[$i] >= 'A' && $text[$i] <= 'Z')) {
+                                
+                                if($i + 1 < $n && $text[$i + 1] != ' ') {
+                                    $s1 .= $text[$i].' ';
+                                }
+                                else {
+                                    $s1 .= $text[$i];
+                                }
+                
+                            }
+                            else {
+                                $s1 .= $text[$i];
+                            }
+                            
+                        }
+                        $text = $s1;
+
+                        $urlstring = $entry->find('.kCrYT a');
+                        $urlstring = $urlstring[0]->href;
+                        $pattern = "/q=https:\/\/(.+?)\//";
+                        preg_match($pattern, $urlstring, $matches);
+                        $urlstring = $matches[1];
+                        // echo "$urlstring<br>$text<br><br>";
+                        // $arr[$urlstring] = $text;
+                        if (strpos($text, $sentence) !== false) {
+                            $plagCount++;
+                            $plagUrls[$urlstring]++;
+                            echo "<div class = 'sent'>
+                                    <div class = 'plag'>plagiarised</div>$sentence - <strong>$urlstring</strong>
+                                </div><br>";
+                            $found = true;
+                            break;
+                        }
+            
+                    }
+                    if($found === false) {
+                        echo "<div class = 'sent'>
+                                    <div class = 'uni'>unique</div>$sentence
+                                </div><br>";
+                    }
                 }
             }
             echo "</div>";
