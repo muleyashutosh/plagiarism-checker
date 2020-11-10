@@ -347,9 +347,6 @@ h4 {
         background: #2d2d2d; 
         margin: 0 !important; 
         padding: 0 !important;
-        overflow: hidden;
-        display: table;
-        table-layout: fixed;
         height: auto;
     }
 
