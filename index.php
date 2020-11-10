@@ -67,13 +67,13 @@
                     $not_printed = false;
                 }
 
-                $totalSentences += count($line);
                 // print_r($data);
                 
                 foreach($line as $sentence) {
                     if(strlen($sentence) < 2) {
                         continue;
                     }
+                    $totalSentences++;
                     $s1 = "";
                     $n = strlen($sentence);
                     $sentence = str_replace('“','"',$sentence);
@@ -171,9 +171,9 @@
 
                         $urlstring = $entry->find('.kCrYT a');
                         $urlstring = $urlstring[0]->href;
-                        $pattern = "/q=https:\/\/(.+?)\//";
+                        $pattern = "/q=(http|https):\/\/(.+?)\//";
                         preg_match($pattern, $urlstring, $matches);
-                        $urlstring = $matches[1];
+                        $urlstring = $matches[2];
                         // echo "$urlstring<br>$text<br><br>";
                         // $arr[$urlstring] = $text;
                         if (strpos($text, $sentence) !== false) {
@@ -239,9 +239,9 @@
 
                             $urlstring = $entry->find('.kCrYT a');
                             $urlstring = $urlstring[0]->href;
-                            $pattern = "/q=https:\/\/(.+?)\//";
+                            $pattern = "/q=(http|https):\/\/(.+?)\//";
                             preg_match($pattern, $urlstring, $matches);
-                            $urlstring = $matches[1];
+                            $urlstring = $matches[2];
                             // echo "$urlstring<br>$text<br><br>";
                             // $arr[$urlstring] = $text;
                             if (strpos($text, $sentence) !== false) {
