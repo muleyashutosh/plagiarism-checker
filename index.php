@@ -108,6 +108,8 @@
                 $query = urlencode($sentence);
                 $url = 'https://www.google.com/search?q='.$query;
                 // echo $url;
+                $url .= '&cr=countryIN';
+                // echo $url;
                 $result = file_get_html($url);
                 $found = false;
                 foreach($result->find('#main div .ZINbbc.xpd.O9g5cc.uUPGi') as $entry) {
