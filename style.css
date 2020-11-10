@@ -328,10 +328,6 @@ h4 {
 
 }
 
-@page {
-    size: A4;
-    margin: 0;
-}
 
 @media print
 {    
@@ -349,7 +345,7 @@ h4 {
     }
     html,body {
         background: #2d2d2d;
-        height:100vh; 
+        height:fit-content; 
         margin: 0 !important; 
         padding: 0 !important;
         overflow: hidden;
