@@ -1,6 +1,6 @@
 # Plagiarism Checker
 
-This is a php script to do plagiarism analysis on a giver paragraph or text. It uses the Google Search Requests and Web Scraping to find exact matches of Given data and based on the results calculate the rate of plagiarism.
+This is a php script to do plagiarism analysis on a given paragraph or text. It uses the Google Search Requests and Web Scraping to find exact matches of Given data and based on the results calculate the rate of plagiarism.
 
 ---
 
